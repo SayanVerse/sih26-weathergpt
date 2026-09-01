@@ -1,0 +1,6 @@
+{
+  "name": "WeatherGPT",
+  "description": "AI-powered weather intelligence application with FastAPI REST API integration, predictive analytics, interactive weather maps, and conversational assistant.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,27 @@
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+asyncpg
+greenlet
+alembic
+# geoalchemy2
+# shapely
+httpx
+celery
+redis
+websockets
+# WeatherGPT Phase 1 requirements
+# openmeteo-requests
+# requests-cache
+# retry-requests
+# numpy
+# pandas
+# Scientific weather data
+# xarray
+# netCDF4
+# cfgrib
+# eccodes
+# Testing
+pytest
+google-genai
