@@ -24,9 +24,13 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    # Attempt to create tables on startup for dev mode
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    # Attempt to create tables on startup
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("Database tables verified successfully.")
+    except Exception as e:
+        print(f"Database connection warning on startup: {e}")
 
 
 app.include_router(health.router)
