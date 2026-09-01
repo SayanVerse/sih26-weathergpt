@@ -191,46 +191,69 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setCurrentLocation({ name: 'Detecting...', region: '', country: '', latitude, longitude });
 
         try {
-          console.log(`📡 Fetching from geocode.maps.co for ${latitude}, ${longitude}...`);
-          const geocodeUrl = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${GEOCODE_KEY}`;
-          
-          // Add an AbortController to timeout the fetch after 5 seconds just in case it hangs
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 5000);
-          
-          const res = await fetch(geocodeUrl, { signal: controller.signal });
-          clearTimeout(timeoutId);
+          let resolvedName = '';
+          let resolvedRegion = '';
+          let resolvedCountry = '';
 
-          if (res.ok) {
-            const data = await res.json();
-            const addr = data.address || {};
-            
-            console.log('📍 Reverse Geocoding Result:');
-            console.log(`   County:         ${addr.county || 'N/A'}`);
-            console.log(`   State District: ${addr.state_district || 'N/A'}`);
-            console.log(`   State:          ${addr.state || 'N/A'}`);
-            
-            // Priority: county > city > town > village > suburb
-            const city =
-              addr.county || addr.city || addr.town || addr.village || addr.suburb || '';
-            const region = addr.state || addr.state_district || '';
-            const country = addr.country || '';
+          // 1. Try BigDataCloud Client Geocoding (Free, instant, accurate)
+          try {
+            const bdcUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
+            const res = await fetch(bdcUrl, { signal: controller.signal });
+            clearTimeout(timeoutId);
 
-            console.log(`✅ Setting location to: ${city}, ${region}, ${country}`);
-            setCurrentLocation({
-              name: city || `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
-              region,
-              country,
-              latitude,
-              longitude,
-            });
-          } else {
-            console.error(`❌ geocode.maps.co returned ${res.status}: ${res.statusText}`);
-            throw new Error(`geocode.maps.co request failed with status ${res.status}`);
+            if (res.ok) {
+              const data = await res.json();
+              resolvedName = data.city || data.locality || data.principalSubdivision || '';
+              resolvedRegion = data.principalSubdivision || '';
+              resolvedCountry = data.countryName || '';
+            }
+          } catch (e) {
+            console.warn('BigDataCloud reverse geocode attempt failed, trying OSM...', e);
           }
+
+          // 2. Fallback to OpenStreetMap Nominatim if needed
+          if (!resolvedName) {
+            try {
+              const osmUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 4000);
+              const res = await fetch(osmUrl, {
+                signal: controller.signal,
+                headers: { 'Accept-Language': 'en' },
+              });
+              clearTimeout(timeoutId);
+
+              if (res.ok) {
+                const data = await res.json();
+                const addr = data.address || {};
+                resolvedName =
+                  addr.city ||
+                  addr.town ||
+                  addr.village ||
+                  addr.suburb ||
+                  addr.county ||
+                  addr.state_district ||
+                  '';
+                resolvedRegion = addr.state || addr.state_district || '';
+                resolvedCountry = addr.country || '';
+              }
+            } catch (e) {
+              console.warn('Nominatim reverse geocode attempt failed...', e);
+            }
+          }
+
+          console.log(`✅ Setting detected location: ${resolvedName}, ${resolvedRegion}, ${resolvedCountry}`);
+          setCurrentLocation({
+            name: resolvedName || `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
+            region: resolvedRegion,
+            country: resolvedCountry,
+            latitude,
+            longitude,
+          });
         } catch (err) {
           console.error('⚠️ Geocoding failed or timed out. Falling back to coordinates.', err);
-          // Final fallback: show coordinates
           setCurrentLocation({
             name: `${latitude.toFixed(2)}°, ${longitude.toFixed(2)}°`,
             region: '',

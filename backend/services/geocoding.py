@@ -40,48 +40,20 @@ async def search_locations(query: str, count: int = 10) -> List[Dict[str, Any]]:
 
 async def reverse_geocode(latitude: float, longitude: float) -> Dict[str, Any]:
     """
-    Reverse geocode using MapTiler API.
+    Reverse geocode coordinates into human-readable city, state/region, and country.
+    Uses multi-tiered provider strategy: BigDataCloud -> Nominatim -> Coordinates fallback.
     """
-    MAPTILER_KEY = "3jIY3RmL6Vmk6ADBLEE9"
-    url = f"https://api.maptiler.com/geocoding/{longitude},{latitude}.json?key={MAPTILER_KEY}"
-    
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(url, timeout=5.0)
-            if response.status_code == 200:
-                data = response.json()
-                features = data.get("features", [])
-                
-                if features:
-                    # MapTiler returns a list of features from most specific to least specific.
-                    # We'll try to find city, region, and country from the context of the most relevant feature.
-                    feature = features[0]
-                    context = feature.get("context", [])
-                    
-                    city = "Unknown"
-                    region = ""
-                    country = "Unknown"
-                    
-                    for item in context:
-                        item_id = item.get("id", "")
-                        text = item.get("text", "")
-                        
-                        if item_id.startswith("municipality") or item_id.startswith("city"):
-                            city = text
-                        elif item_id.startswith("region") or item_id.startswith("state"):
-                            region = text
-                        elif item_id.startswith("country"):
-                            country = text
-                            
-                    # Sometimes the feature itself is the city
-                    feature_id = feature.get("id", "")
-                    if feature_id.startswith("municipality") or feature_id.startswith("city"):
-                        city = feature.get("text", city)
-                        
-                    # If we couldn't find a city in context, use the primary text if it's a place/poi
-                    if city == "Unknown" and (feature_id.startswith("place") or feature_id.startswith("poi")):
-                         city = feature.get("text", city)
-
+    # 1. Primary: BigDataCloud Client API (Free, fast, no key required)
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            bdc_url = f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={latitude}&longitude={longitude}&localityLanguage=en"
+            resp = await client.get(bdc_url)
+            if resp.status_code == 200:
+                data = resp.json()
+                city = data.get("city") or data.get("locality") or data.get("principalSubdivision") or "Current Location"
+                region = data.get("principalSubdivision") or ""
+                country = data.get("countryName") or ""
+                if city:
                     return {
                         "name": city,
                         "country": country,
@@ -89,13 +61,43 @@ async def reverse_geocode(latitude: float, longitude: float) -> Dict[str, Any]:
                         "latitude": latitude,
                         "longitude": longitude
                     }
-        except Exception as e:
-            print(f"MapTiler reverse geocode failed: {e}")
-            
-    # Fallback if reverse geocoding fails
+    except Exception as e:
+        print(f"BigDataCloud reverse geocode error: {e}")
+
+    # 2. Fallback: OpenStreetMap Nominatim
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            headers = {"User-Agent": "WeatherGPT/2.0 (weather app geocoding)"}
+            nom_url = f"https://nominatim.openstreetmap.org/reverse?lat={latitude}&lon={longitude}&format=json"
+            resp = await client.get(nom_url, headers=headers)
+            if resp.status_code == 200:
+                data = resp.json()
+                addr = data.get("address", {})
+                city = (
+                    addr.get("city")
+                    or addr.get("town")
+                    or addr.get("village")
+                    or addr.get("suburb")
+                    or addr.get("county")
+                    or addr.get("state_district")
+                    or "Current Location"
+                )
+                region = addr.get("state") or addr.get("state_district") or ""
+                country = addr.get("country") or ""
+                return {
+                    "name": city,
+                    "country": country,
+                    "region": region,
+                    "latitude": latitude,
+                    "longitude": longitude
+                }
+    except Exception as e:
+        print(f"Nominatim reverse geocode error: {e}")
+
+    # Final fallback if all providers fail
     return {
-        "name": f"Lat {latitude:.4f}, Lon {longitude:.4f}",
-        "country": "Unknown",
+        "name": f"{latitude:.2f}°, {longitude:.2f}°",
+        "country": "",
         "region": "",
         "latitude": latitude,
         "longitude": longitude

@@ -58,13 +58,15 @@ export const CurrentWeather: React.FC<CurrentWeatherProps> = ({
             Live Weather Conditions
           </div>
 
-          <div className="flex items-baseline gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold text-zinc-100 tracking-tight">
               {currentLocation.name}
             </h1>
-            <span className="text-zinc-400 text-sm">
-              {[currentLocation.region, currentLocation.country].filter(Boolean).join(', ')}
-            </span>
+            {Boolean(currentLocation.region || currentLocation.country) && (
+              <span className="text-zinc-400 text-xs sm:text-sm">
+                {[currentLocation.region, currentLocation.country].filter(Boolean).join(', ')}
+              </span>
+            )}
           </div>
 
           <div className="text-zinc-400 text-xs sm:text-sm flex items-center gap-2">
