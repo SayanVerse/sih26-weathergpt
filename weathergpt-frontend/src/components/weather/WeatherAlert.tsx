@@ -27,17 +27,17 @@ export const WeatherAlert: React.FC<WeatherAlertProps> = ({ alertsData }) => {
         return (
           <div
             key={alert.id}
-            className={`rounded-xl border p-4 transition-all duration-200 backdrop-blur-md ${
+            className={`rounded-xl border p-4 transition-all duration-200 backdrop-blur-md shadow-xs ${
               isWarning
-                ? 'bg-rose-950/30 border-rose-500/30 text-rose-100'
-                : 'bg-amber-950/25 border-amber-500/25 text-amber-100'
+                ? 'bg-rose-50/90 dark:bg-rose-950/30 border-rose-200/90 dark:border-rose-500/30 text-rose-950 dark:text-rose-100'
+                : 'bg-amber-50/90 dark:bg-amber-950/25 border-amber-200/90 dark:border-amber-500/25 text-amber-950 dark:text-amber-100'
             }`}
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 flex-1 min-w-0">
                 <div
                   className={`p-2 rounded-lg shrink-0 mt-0.5 ${
-                    isWarning ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'
+                    isWarning ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400' : 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
                   }`}
                 >
                   <AlertTriangle className="w-4 h-4" />
@@ -45,14 +45,14 @@ export const WeatherAlert: React.FC<WeatherAlertProps> = ({ alertsData }) => {
 
                 <div className="space-y-1 min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider">
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
                       {alert.title}
                     </span>
                     <Badge variant={isWarning ? 'rose' : 'amber'} size="sm">
                       {alert.severity.toUpperCase()}
                     </Badge>
                   </div>
-                  <p className="text-xs text-zinc-300 font-medium">
+                  <p className="text-xs text-zinc-700 dark:text-zinc-300 font-medium">
                     {alert.headline}
                   </p>
                 </div>
@@ -60,7 +60,7 @@ export const WeatherAlert: React.FC<WeatherAlertProps> = ({ alertsData }) => {
 
               <button
                 onClick={() => toggleExpand(alert.id)}
-                className="p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-300 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-zinc-200/80 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition-colors cursor-pointer"
                 title={isExpanded ? 'Collapse advisory' : 'Expand details'}
                 aria-label="Toggle details"
               >
@@ -69,17 +69,17 @@ export const WeatherAlert: React.FC<WeatherAlertProps> = ({ alertsData }) => {
             </div>
 
             {isExpanded && (
-              <div className="mt-3 pt-3 border-t border-zinc-800 space-y-2 text-xs text-zinc-300 animate-in fade-in duration-150">
+              <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800 space-y-2 text-xs text-zinc-700 dark:text-zinc-300 animate-in fade-in duration-150">
                 <p className="leading-relaxed">{alert.description}</p>
                 {alert.instruction && (
-                  <div className="bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-800">
-                    <strong className="text-amber-300 font-semibold block mb-1">
+                  <div className="bg-white/90 dark:bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-xs">
+                    <strong className="text-amber-700 dark:text-amber-300 font-semibold block mb-1">
                       Recommended Precautions:
                     </strong>
-                    <p className="text-zinc-300">{alert.instruction}</p>
+                    <p className="text-zinc-700 dark:text-zinc-300">{alert.instruction}</p>
                   </div>
                 )}
-                <div className="text-[10px] text-zinc-500 flex items-center justify-between">
+                <div className="text-[10px] text-zinc-500 dark:text-zinc-400 flex items-center justify-between">
                   <span>Source: {alert.source}</span>
                   <span>Effective until: {new Date(alert.expires).toLocaleDateString()}</span>
                 </div>

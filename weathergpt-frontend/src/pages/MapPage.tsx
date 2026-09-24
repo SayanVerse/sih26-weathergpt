@@ -9,20 +9,20 @@ export const MapPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-zinc-100 tracking-tight">
+            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
               Interactive Weather Radar & Map
             </h1>
             <Badge variant="blue" size="sm">
               Doppler Telemetry
             </Badge>
           </div>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
             Multi-layer meteorological map visualizing temperature gradients, precipitation radar, wind vectors, and cloud systems.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-zinc-400 bg-zinc-900/80 px-3 py-1.5 rounded-xl border border-zinc-800 shrink-0">
-          <Radio className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+        <div className="flex items-center gap-2 text-xs text-zinc-700 dark:text-zinc-300 bg-white/80 dark:bg-zinc-900/80 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xs shrink-0">
+          <Radio className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 animate-pulse" />
           <span>Real-time Satellite Feed</span>
         </div>
       </div>

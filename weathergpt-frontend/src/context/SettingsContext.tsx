@@ -95,18 +95,32 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Apply dark mode to document element
   useEffect(() => {
     const root = document.documentElement;
-    if (settings.theme === 'dark') {
-      root.classList.add('dark');
-    } else if (settings.theme === 'light') {
-      root.classList.remove('dark');
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const applyTheme = () => {
+      if (settings.theme === 'dark') {
         root.classList.add('dark');
-      } else {
+      } else if (settings.theme === 'light') {
         root.classList.remove('dark');
+      } else {
+        if (mediaQuery.matches) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
       }
-    }
+    };
+
+    applyTheme();
+
+    const listener = () => {
+      if (settings.theme === 'system') {
+        applyTheme();
+      }
+    };
+
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
   }, [settings.theme]);
 
   const updateSettings = (partial: Partial<AppSettings>) => {

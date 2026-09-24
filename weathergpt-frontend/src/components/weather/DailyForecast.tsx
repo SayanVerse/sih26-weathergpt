@@ -31,12 +31,12 @@ const OverflowMarquee: React.FC<{ text: string }> = ({ text }) => {
   return (
     <div ref={containerRef} className="hidden sm:flex flex-1 overflow-hidden relative group w-full">
       {isOverflowing ? (
-        <div className="animate-marquee pause-on-hover hover:text-white transition-colors w-max">
-          <span className="text-xs text-zinc-300 pr-8">{text}</span>
-          <span className="text-xs text-zinc-300 pr-8" aria-hidden="true">{text}</span>
+        <div className="animate-marquee pause-on-hover hover:text-blue-600 dark:hover:text-white transition-colors w-max">
+          <span className="text-xs text-zinc-600 dark:text-zinc-300 pr-8">{text}</span>
+          <span className="text-xs text-zinc-600 dark:text-zinc-300 pr-8" aria-hidden="true">{text}</span>
         </div>
       ) : (
-        <span ref={textRef} className="text-xs text-zinc-300 truncate inline-block w-full">
+        <span ref={textRef} className="text-xs text-zinc-600 dark:text-zinc-300 truncate inline-block w-full">
           {text}
         </span>
       )}
@@ -49,11 +49,11 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ daily, isLoading =
 
   if (isLoading || !daily) {
     return (
-      <div className="rounded-2xl bg-zinc-900/80 border border-zinc-800 p-5 backdrop-blur-xl">
-        <Skeleton className="h-5 w-36 mb-4 rounded-lg bg-zinc-800" />
+      <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 p-5 backdrop-blur-xl">
+        <Skeleton className="h-5 w-36 mb-4 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full rounded-xl bg-zinc-800" />
+            <Skeleton key={i} className="h-12 w-full rounded-xl bg-zinc-200 dark:bg-zinc-800" />
           ))}
         </div>
       </div>
@@ -67,10 +67,10 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ daily, isLoading =
   const tempRange = Math.max(1, maxTemp - minTemp);
 
   return (
-    <div className="rounded-2xl bg-zinc-900/80 border border-zinc-800 p-5 shadow-lg backdrop-blur-xl">
+    <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm dark:shadow-lg backdrop-blur-xl">
       <div className="flex items-center gap-2 mb-4">
-        <CalendarDays className="w-4 h-4 text-blue-400" />
-        <h3 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">
+        <CalendarDays className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+        <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
           5-Day Weather Outlook
         </h3>
       </div>
@@ -93,17 +93,17 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ daily, isLoading =
               key={`${day.date}-${idx}`}
               className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl transition-colors ${
                 isToday
-                  ? 'bg-zinc-800/90 border border-blue-500/30'
-                  : 'hover:bg-zinc-850 bg-zinc-900/40 border border-zinc-800/60'
+                  ? 'bg-blue-50/80 dark:bg-zinc-800/90 border border-blue-200 dark:border-blue-500/30'
+                  : 'hover:bg-zinc-50 dark:hover:bg-zinc-850 bg-white/80 dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/60 shadow-sm dark:shadow-none'
               }`}
             >
               {/* Day Name */}
               <div className="w-20 sm:w-24 shrink-0">
-                <span className={`text-xs font-medium ${isToday ? 'text-blue-400 font-semibold' : 'text-zinc-200'}`}>
+                <span className={`text-xs font-medium ${isToday ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-zinc-800 dark:text-zinc-200'}`}>
                   {day.day_name}
                 </span>
                 {isToday && (
-                  <span className="ml-1.5 text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
+                  <span className="ml-1.5 text-[10px] text-blue-600 dark:text-blue-400 font-semibold uppercase tracking-wider">
                     Today
                   </span>
                 )}
@@ -116,26 +116,26 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ daily, isLoading =
               </div>
 
               {/* Precipitation Chance */}
-              <div className="w-20 flex items-center gap-1 text-[11px] text-blue-400 font-mono-numbers shrink-0">
+              <div className="w-20 flex items-center gap-1 text-[11px] text-blue-600 dark:text-blue-400 font-mono-numbers shrink-0">
                 {day.precipitation_probability > 0 ? (
                   <>
-                    <Droplets className="w-3 h-3 text-blue-400 shrink-0" />
-                    <span className="text-zinc-400 text-[10px] mr-0.5">Rain</span>
+                    <Droplets className="w-3 h-3 text-blue-500 dark:text-blue-400 shrink-0" />
+                    <span className="text-zinc-500 dark:text-zinc-400 text-[10px] mr-0.5">Rain</span>
                     <span>{Math.round(day.precipitation_probability)}%</span>
                   </>
                 ) : (
-                  <span className="text-zinc-600 text-xs">—</span>
+                  <span className="text-zinc-400 dark:text-zinc-600 text-xs">—</span>
                 )}
               </div>
 
               {/* Temperature Bar & High/Low */}
               <div className="flex items-center gap-2 sm:gap-3 flex-1 max-w-[200px] justify-end">
-                <span className="text-xs text-zinc-400 font-mono-numbers w-8 text-right">
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-mono-numbers w-8 text-right">
                   {formattedLow}
                 </span>
 
                 {/* Visual thermal spread gradient bar */}
-                <div className="hidden md:block flex-1 h-1.5 bg-zinc-800 rounded-full relative overflow-hidden">
+                <div className="hidden md:block flex-1 h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full relative overflow-hidden">
                   <div
                     className="absolute top-0 bottom-0 rounded-full bg-gradient-to-r from-blue-500 via-amber-400 to-rose-400 opacity-90"
                     style={{
@@ -145,7 +145,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ daily, isLoading =
                   />
                 </div>
 
-                <span className="text-xs font-semibold text-zinc-100 font-mono-numbers w-8 text-right">
+                <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 font-mono-numbers w-8 text-right">
                   {formattedHigh}
                 </span>
               </div>

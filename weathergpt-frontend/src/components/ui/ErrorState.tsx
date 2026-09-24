@@ -22,14 +22,14 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center p-8 text-center rounded-2xl bg-slate-900/60 border border-rose-500/20 backdrop-blur-md ${className}`}
+      className={`flex flex-col items-center justify-center p-8 text-center rounded-2xl bg-white/90 dark:bg-slate-900/60 border border-rose-500/20 shadow-sm dark:shadow-none backdrop-blur-md ${className}`}
     >
-      <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/25 flex items-center justify-center text-rose-400 mb-4 shadow-inner">
+      <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/25 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-4 shadow-inner">
         <ServerCrash className="w-6 h-6" />
       </div>
 
-      <h3 className="text-lg font-semibold text-slate-100 mb-2">{title}</h3>
-      <p className="text-sm text-slate-400 max-w-md mb-6 leading-relaxed">
+      <h3 className="text-lg font-semibold text-zinc-900 dark:text-slate-100 mb-2">{title}</h3>
+      <p className="text-sm text-zinc-600 dark:text-slate-400 max-w-md mb-6 leading-relaxed">
         {message}
       </p>
 
@@ -52,9 +52,9 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         )}
       </div>
 
-      <div className="mt-6 text-xs text-slate-500 flex items-center gap-1.5 font-mono">
+      <div className="mt-6 text-xs text-zinc-500 flex items-center gap-1.5 font-mono">
         <span>Target Base URL:</span>
-        <code className="text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/50">
+        <code className="text-zinc-700 dark:text-slate-400 bg-zinc-100 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-zinc-200 dark:border-slate-700/50">
           {settings.apiBaseUrl}
         </code>
       </div>

@@ -58,6 +58,25 @@ export const Header: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
 
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    if (settings.theme === 'dark') return true;
+    if (settings.theme === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    const updateIsDark = () => {
+      if (settings.theme === 'dark') setIsDark(true);
+      else if (settings.theme === 'light') setIsDark(false);
+      else setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    };
+    updateIsDark();
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', updateIsDark);
+    return () => mq.removeEventListener('change', updateIsDark);
+  }, [settings.theme]);
+
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const locationDropdownRef = useRef<HTMLDivElement>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
@@ -130,7 +149,7 @@ export const Header: React.FC = () => {
               <Link to="/" className="hidden md:block shrink-0" aria-label="WeatherGPT Home">
                 <WarpText
                   text="WeatherGPT"
-                  color="#e0eaff"
+                  color={isDark ? '#e0eaff' : '#0f172a'}
                   fontSize={32}
                   fontWeight={900}
                   letterSpacing="-0.04em"
@@ -349,6 +368,22 @@ export const Header: React.FC = () => {
                 className="hidden sm:inline-flex text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
               >
                 <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
+
+              {/* Theme Toggle Button (Light/Dark mode) */}
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                className="text-zinc-600 dark:text-zinc-300 hover:text-amber-500 dark:hover:text-yellow-400 hover:border-amber-500/40"
+              >
+                {isDark ? (
+                  <Sun className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                )}
               </Button>
 
               {/* Mobile Hamburger Menu Toggle Button */}

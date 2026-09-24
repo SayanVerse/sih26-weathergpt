@@ -9,8 +9,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className, shimmer = true, .
   return (
     <div
       className={cn(
-        'rounded-xl bg-slate-800/60 animate-pulse',
-        shimmer && 'relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-slate-700/20 before:to-transparent',
+        'rounded-xl bg-zinc-200/80 dark:bg-slate-800/60 animate-pulse',
+        shimmer && 'relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-zinc-300/40 dark:before:via-slate-700/20 before:to-transparent',
         className
       )}
       {...props}

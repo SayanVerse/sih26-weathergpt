@@ -25,14 +25,14 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
 
   if (isLoading || !hourly) {
     return (
-      <div className="rounded-2xl bg-zinc-900/80 border border-zinc-800 p-5 backdrop-blur-xl">
+      <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 p-5 backdrop-blur-xl">
         <div className="flex items-center justify-between mb-4">
-          <Skeleton className="h-5 w-32 rounded-lg bg-zinc-800" />
-          <Skeleton className="h-5 w-16 rounded-lg bg-zinc-800" />
+          <Skeleton className="h-5 w-32 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+          <Skeleton className="h-5 w-16 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
         </div>
         <div className="flex gap-3 overflow-hidden">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-32 w-20 shrink-0 rounded-2xl bg-zinc-800" />
+            <Skeleton key={i} className="h-32 w-20 shrink-0 rounded-2xl bg-zinc-200 dark:bg-zinc-800" />
           ))}
         </div>
       </div>
@@ -40,11 +40,11 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
   }
 
   return (
-    <div className="rounded-2xl bg-zinc-900/80 border border-zinc-800 p-5 shadow-lg backdrop-blur-xl">
+    <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm dark:shadow-lg backdrop-blur-xl">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-blue-400" />
-          <h3 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">
+          <Clock className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+          <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
             24-Hour Forecast
           </h3>
         </div>
@@ -53,7 +53,7 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
         <div className="flex items-center gap-1">
           <button
             onClick={() => scroll('left')}
-            className="p-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 cursor-pointer transition-colors"
+            className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-zinc-200/80 dark:border-transparent cursor-pointer transition-colors"
             title="Scroll left"
             aria-label="Scroll left"
           >
@@ -61,7 +61,7 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
           </button>
           <button
             onClick={() => scroll('right')}
-            className="p-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 cursor-pointer transition-colors"
+            className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-zinc-200/80 dark:border-transparent cursor-pointer transition-colors"
             title="Scroll right"
             aria-label="Scroll right"
           >
@@ -73,7 +73,7 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
       {/* Horizontal Scroll Container */}
       <div
         ref={scrollContainerRef}
-        className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent scroll-smooth"
+        className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent scroll-smooth"
       >
         {hourly.hourly.slice(0, 24).map((item, index) => {
           const formattedTemp = formatTemperature(item.temperature, settings.temperatureUnit);
@@ -84,11 +84,11 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
               key={`${item.time}-${index}`}
               className={`flex flex-col items-center justify-between p-3 rounded-xl shrink-0 min-w-[76px] transition-all duration-150 ${
                 isNow
-                  ? 'bg-blue-600/15 border border-blue-500/40 text-blue-300'
-                  : 'bg-zinc-900/90 hover:bg-zinc-800/80 border border-zinc-800 text-zinc-200'
+                  ? 'bg-blue-50 dark:bg-blue-600/15 border border-blue-300 dark:border-blue-500/40 text-blue-700 dark:text-blue-300 shadow-sm'
+                  : 'bg-white hover:bg-zinc-50 dark:bg-zinc-900/90 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-sm dark:shadow-none'
               }`}
             >
-              <span className="text-xs font-medium text-zinc-400">
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                 {isNow ? 'Now' : formatHour(item.time)}
               </span>
 
@@ -100,12 +100,12 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourly, isLoadin
                 />
               </div>
 
-              <span className="text-sm font-bold text-zinc-100 font-mono-numbers">
+              <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100 font-mono-numbers">
                 {formattedTemp}
               </span>
 
               {/* Rain Probability Pill */}
-              <div className="mt-1.5 flex items-center gap-0.5 text-[10px] font-mono-numbers font-medium text-blue-400">
+              <div className="mt-1.5 flex items-center gap-0.5 text-[10px] font-mono-numbers font-medium text-blue-600 dark:text-blue-400">
                 <Droplets className="w-2.5 h-2.5" />
                 <span>{item.precipitation_probability}%</span>
               </div>

@@ -69,7 +69,8 @@ export function setDataSourceMode(mode: 'auto' | 'fastapi' | 'mock'): void {
 }
 
 class HttpClient {
-  private timeoutMs: number = 30000;
+  // Default timeout 4000ms for weather telemetry to prevent UI hang when local backend is offline
+  private timeoutMs: number = 4000;
 
   private getBaseUrl(): string {
     return getApiBaseUrl();
@@ -77,14 +78,16 @@ class HttpClient {
 
   public async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    customTimeoutMs?: number
   ): Promise<T> {
     const baseUrl = this.getBaseUrl();
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
     const url = `${baseUrl}${cleanEndpoint}`;
 
+    const timeout = customTimeoutMs ?? this.timeoutMs;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -139,7 +142,7 @@ class HttpClient {
     }
   }
 
-  public get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  public get<T>(endpoint: string, params?: Record<string, any>, customTimeoutMs?: number): Promise<T> {
     let url = endpoint;
     if (params) {
       const queryParams = new URLSearchParams();
@@ -153,18 +156,18 @@ class HttpClient {
         url += `${endpoint.includes('?') ? '&' : '?'}${queryString}`;
       }
     }
-    return this.request<T>(url, { method: 'GET' });
+    return this.request<T>(url, { method: 'GET' }, customTimeoutMs);
   }
 
-  public post<T>(endpoint: string, body?: any): Promise<T> {
+  public post<T>(endpoint: string, body?: any, customTimeoutMs?: number): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: body ? JSON.stringify(body) : undefined,
-    });
+    }, customTimeoutMs);
   }
 
-  public delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' });
+  public delete<T>(endpoint: string, customTimeoutMs?: number): Promise<T> {
+    return this.request<T>(endpoint, { method: 'DELETE' }, customTimeoutMs);
   }
 }
 

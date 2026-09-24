@@ -40,8 +40,8 @@ export const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
 }) => {
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-400">
-        <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+      <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <Sparkles className="w-3.5 h-3.5 text-blue-500" />
         <span>Suggested Inquiries</span>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -52,9 +52,9 @@ export const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
               key={index}
               onClick={() => onSelectPrompt(item.text)}
               disabled={disabled}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-xs text-zinc-300 hover:text-blue-300 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 hover:border-zinc-300 dark:border-zinc-800 dark:hover:border-zinc-700 text-xs text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-300 shadow-2xs transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Icon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <Icon className="w-3.5 h-3.5 text-blue-500 shrink-0" />
               <span>{item.text}</span>
             </button>
           );

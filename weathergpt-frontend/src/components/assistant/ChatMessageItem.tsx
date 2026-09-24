@@ -205,15 +205,15 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message, onReg
       >
         {/* Floating Action Toolbar for AI Messages */}
         {!isUser && !isStreaming && !isError && (
-          <div className="absolute -top-8 right-0 hidden group-hover:flex items-center gap-2 bg-zinc-900 text-zinc-300 rounded-xl px-2 py-1.5 shadow-lg border border-zinc-700/50 z-10 transition-opacity">
-            <button className="p-1 hover:text-white transition-colors" title="AI Refine"><Sparkles className="w-3.5 h-3.5" /></button>
-            <button className="p-1 hover:text-white transition-colors" title="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
+          <div className="absolute -top-8 right-0 hidden group-hover:flex items-center gap-2 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 rounded-xl px-2 py-1.5 shadow-lg border border-zinc-200 dark:border-zinc-700/50 z-10 transition-opacity">
+            <button className="p-1 hover:text-zinc-900 dark:hover:text-white transition-colors" title="AI Refine"><Sparkles className="w-3.5 h-3.5" /></button>
+            <button className="p-1 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Edit"><Edit2 className="w-3.5 h-3.5" /></button>
             {onRegenerate && (
-              <button onClick={() => onRegenerate(message.id)} className="p-1 hover:text-white transition-colors" title="Regenerate">
+              <button onClick={() => onRegenerate(message.id)} className="p-1 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Regenerate">
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
             )}
-            <button onClick={handleCopy} className="p-1 hover:text-white transition-colors" title="Copy">
+            <button onClick={handleCopy} className="p-1 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Copy">
               <Copy className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -223,9 +223,9 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message, onReg
         <div
           className={`p-4 sm:p-5 text-sm transition-all ${
             isUser
-              ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-2xl'
+              ? 'bg-blue-50/90 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-2xl border border-blue-100 dark:border-zinc-700/60 shadow-2xs'
               : isError
-              ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-200 rounded-2xl'
+              ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-200 rounded-2xl border border-rose-200 dark:border-rose-900'
               : 'bg-transparent text-zinc-800 dark:text-zinc-200'
           }`}
         >

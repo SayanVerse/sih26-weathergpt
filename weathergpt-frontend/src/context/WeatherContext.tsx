@@ -96,7 +96,7 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
     queryKey: ['weather', 'current', lat, lon, settings.dataSourceMode, settings.apiBaseUrl],
     queryFn: () => weatherApi.getCurrentWeather(lat, lon, currentLocation),
     staleTime: 1000 * 60 * 5, // 5 minutes stale time
-    retry: 1,
+    retry: false,
   });
 
   // 2. Hourly Forecast
@@ -108,7 +108,7 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
     queryKey: ['weather', 'hourly', lat, lon, settings.dataSourceMode, settings.apiBaseUrl],
     queryFn: () => weatherApi.getHourlyForecast(lat, lon, currentLocation),
     staleTime: 1000 * 60 * 5,
-    retry: 1,
+    retry: false,
   });
 
   // 3. Daily Forecast
@@ -120,7 +120,7 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
     queryKey: ['weather', 'daily', lat, lon, settings.dataSourceMode, settings.apiBaseUrl],
     queryFn: () => weatherApi.getDailyForecast(lat, lon, currentLocation),
     staleTime: 1000 * 60 * 10,
-    retry: 1,
+    retry: false,
   });
 
   // 4. Weather Alerts
@@ -131,6 +131,7 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
     queryKey: ['weather', 'alerts', lat, lon, settings.dataSourceMode, settings.apiBaseUrl],
     queryFn: () => weatherApi.getWeatherAlerts(lat, lon, currentLocation),
     staleTime: 1000 * 60 * 10,
+    retry: false,
   });
 
   // 5. AI Insights

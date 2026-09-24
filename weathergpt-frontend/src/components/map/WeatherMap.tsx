@@ -128,15 +128,15 @@ export const WeatherMap: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Map Control Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 shadow-md backdrop-blur-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-white/90 dark:bg-zinc-900/80 border border-zinc-200/90 dark:border-zinc-800 shadow-md backdrop-blur-xl">
         {/* Layer Selector */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           <button
             onClick={() => setActiveLayer('temp')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeLayer === 'temp'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-750'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-800 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300'
             }`}
           >
             <Thermometer className="w-3.5 h-3.5" />
@@ -147,8 +147,8 @@ export const WeatherMap: React.FC = () => {
             onClick={() => setActiveLayer('rain')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeLayer === 'rain'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-750'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-800 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300'
             }`}
           >
             <CloudRain className="w-3.5 h-3.5" />
@@ -159,8 +159,8 @@ export const WeatherMap: React.FC = () => {
             onClick={() => setActiveLayer('wind')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeLayer === 'wind'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-750'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-800 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300'
             }`}
           >
             <Wind className="w-3.5 h-3.5" />
@@ -171,8 +171,8 @@ export const WeatherMap: React.FC = () => {
             onClick={() => setActiveLayer('clouds')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeLayer === 'clouds'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-750'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-800 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300'
             }`}
           >
             <Cloud className="w-3.5 h-3.5" />
@@ -182,18 +182,18 @@ export const WeatherMap: React.FC = () => {
 
         {/* Zoom & Centering controls */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-zinc-800 rounded-xl p-0.5 border border-zinc-700">
+          <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-xl p-0.5 border border-zinc-200 dark:border-zinc-700">
             <button
               onClick={() => setZoomLevel((z) => Math.min(12, z + 1))}
-              className="p-1.5 text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-700 cursor-pointer"
+              className="p-1.5 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer transition-colors"
               title="Zoom in"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
-            <span className="px-2 text-xs font-mono text-zinc-400">{zoomLevel}x</span>
+            <span className="px-2 text-xs font-mono text-zinc-600 dark:text-zinc-400">{zoomLevel}x</span>
             <button
               onClick={() => setZoomLevel((z) => Math.max(2, z - 1))}
-              className="p-1.5 text-zinc-300 hover:text-white rounded-lg hover:bg-zinc-700 cursor-pointer"
+              className="p-1.5 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer transition-colors"
               title="Zoom out"
             >
               <ZoomOut className="w-4 h-4" />
@@ -215,16 +215,16 @@ export const WeatherMap: React.FC = () => {
               });
             }}
           >
-            <Navigation className="w-3.5 h-3.5 mr-1 text-blue-400" />
+            <Navigation className="w-3.5 h-3.5 mr-1 text-blue-500" />
             Center Current
           </Button>
         </div>
       </div>
 
       {/* Interactive Map Visual Stage */}
-      <div className="relative h-[560px] rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden backdrop-blur-xl">
+      <div className="relative h-[560px] rounded-2xl bg-slate-950 border border-zinc-300 dark:border-zinc-800 shadow-2xl overflow-hidden backdrop-blur-xl">
         {/* Synthetic Map Background Grid & Continents Layer */}
-        <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(#3f3f46_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
 
         {/* Active Weather Heatmap Gradient Simulation */}
         <div
@@ -234,7 +234,7 @@ export const WeatherMap: React.FC = () => {
         />
 
         {/* Global coordinate grid lines */}
-        <div className="absolute inset-0 pointer-events-none opacity-15 flex justify-between">
+        <div className="absolute inset-0 pointer-events-none opacity-20 flex justify-between">
           <div className="w-[1px] h-full bg-blue-400 border-dashed border-blue-400" />
           <div className="w-[1px] h-full bg-blue-400 border-dashed border-blue-400" />
           <div className="w-[1px] h-full bg-blue-400 border-dashed border-blue-400" />
@@ -280,7 +280,7 @@ export const WeatherMap: React.FC = () => {
               >
                 {/* Ping ring for current location */}
                 {isFocus && (
-                  <span className="absolute -inset-2 rounded-full bg-blue-400/20 animate-ping pointer-events-none" />
+                  <span className="absolute -inset-2 rounded-full bg-blue-400/30 animate-ping pointer-events-none" />
                 )}
 
                 {/* Marker Pill */}
@@ -289,11 +289,11 @@ export const WeatherMap: React.FC = () => {
                     isFocus
                       ? 'bg-blue-600 text-white font-semibold border-blue-400'
                       : isSelected
-                      ? 'bg-zinc-800 text-zinc-100 border-blue-400 ring-2 ring-blue-500/30'
-                      : 'bg-zinc-900/90 text-zinc-200 border-zinc-700/80 hover:border-zinc-500'
+                      ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-blue-500 ring-2 ring-blue-500/30'
+                      : 'bg-white/95 dark:bg-zinc-900/90 text-zinc-900 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700/80 hover:border-blue-400 shadow-sm'
                   }`}
                 >
-                  <MapPin className={`w-3.5 h-3.5 ${isFocus ? 'text-white' : 'text-blue-400'}`} />
+                  <MapPin className={`w-3.5 h-3.5 ${isFocus ? 'text-white' : 'text-blue-500'}`} />
                   <span className="text-xs font-semibold">{pin.name}</span>
                   <span className="text-xs font-mono-numbers opacity-90">
                     {formatTemperature(pin.temp, settings.temperatureUnit)}
@@ -306,41 +306,41 @@ export const WeatherMap: React.FC = () => {
 
         {/* Selected City Inspection Popover Card */}
         {selectedPin && (
-          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-80 rounded-2xl bg-zinc-900 border border-zinc-700 shadow-2xl p-4 z-40 backdrop-blur-xl animate-in fade-in slide-in-from-bottom-2 duration-150">
+          <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-80 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-2xl p-4 z-40 backdrop-blur-xl animate-in fade-in slide-in-from-bottom-2 duration-150">
             <div className="flex items-start justify-between gap-3 mb-2">
               <div>
-                <h4 className="text-sm font-semibold text-zinc-100 flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-blue-400" />
+                <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-blue-500" />
                   {selectedPin.name}
                 </h4>
-                <div className="text-[11px] text-zinc-400 font-mono">
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">
                   {selectedPin.lat.toFixed(2)}° N, {selectedPin.lon.toFixed(2)}° E
                 </div>
               </div>
               <button
                 onClick={() => setSelectedPin(null)}
-                className="text-zinc-400 hover:text-zinc-200 text-xs p-1"
+                className="text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 text-xs p-1 cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
             <div className="grid grid-cols-3 gap-2 my-3 text-center">
-              <div className="p-2 rounded-xl bg-zinc-800/80 border border-zinc-700/50">
-                <span className="text-[10px] text-zinc-400 block">Temperature</span>
-                <span className="text-sm font-semibold text-zinc-100 font-mono-numbers">
+              <div className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/50">
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block">Temperature</span>
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 font-mono-numbers">
                   {formatTemperature(selectedPin.temp, settings.temperatureUnit)}
                 </span>
               </div>
-              <div className="p-2 rounded-xl bg-zinc-800/80 border border-zinc-700/50">
-                <span className="text-[10px] text-zinc-400 block">Rain Chance</span>
-                <span className="text-sm font-semibold text-blue-400 font-mono-numbers">
+              <div className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/50">
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block">Rain Chance</span>
+                <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 font-mono-numbers">
                   {selectedPin.rainProb}%
                 </span>
               </div>
-              <div className="p-2 rounded-xl bg-zinc-800/80 border border-zinc-700/50">
-                <span className="text-[10px] text-zinc-400 block">Wind</span>
-                <span className="text-sm font-semibold text-teal-400 font-mono-numbers">
+              <div className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/50">
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block">Wind</span>
+                <span className="text-sm font-semibold text-teal-600 dark:text-teal-400 font-mono-numbers">
                   {formatWindSpeed(selectedPin.windSpeed, settings.windSpeedUnit)}
                 </span>
               </div>
@@ -365,8 +365,8 @@ export const WeatherMap: React.FC = () => {
         )}
 
         {/* Layer Legend in bottom right */}
-        <div className="absolute bottom-4 right-4 rounded-xl bg-zinc-900/90 border border-zinc-800 px-3 py-2 text-[11px] text-zinc-300 backdrop-blur-md hidden sm:block">
-          <div className="font-semibold text-zinc-400 mb-1 capitalize">
+        <div className="absolute bottom-4 right-4 rounded-xl bg-white/95 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 px-3 py-2 text-[11px] text-zinc-700 dark:text-zinc-300 backdrop-blur-md shadow-md hidden sm:block">
+          <div className="font-semibold text-zinc-600 dark:text-zinc-400 mb-1 capitalize">
             {activeLayer} Scale Legend
           </div>
           {activeLayer === 'temp' && (
@@ -379,21 +379,21 @@ export const WeatherMap: React.FC = () => {
           {activeLayer === 'rain' && (
             <div className="flex items-center gap-1.5 font-mono text-[10px]">
               <span>0 mm</span>
-              <div className="w-24 h-2 rounded bg-gradient-to-r from-zinc-700 via-blue-500 to-blue-700" />
+              <div className="w-24 h-2 rounded bg-gradient-to-r from-zinc-300 dark:from-zinc-700 via-blue-500 to-blue-700" />
               <span>50+ mm</span>
             </div>
           )}
           {activeLayer === 'wind' && (
             <div className="flex items-center gap-1.5 font-mono text-[10px]">
               <span>0 km/h</span>
-              <div className="w-24 h-2 rounded bg-gradient-to-r from-zinc-700 via-blue-400 to-teal-400" />
+              <div className="w-24 h-2 rounded bg-gradient-to-r from-zinc-300 dark:from-zinc-700 via-blue-400 to-teal-400" />
               <span>100 km/h</span>
             </div>
           )}
           {activeLayer === 'clouds' && (
             <div className="flex items-center gap-1.5 font-mono text-[10px]">
               <span>Clear</span>
-              <div className="w-24 h-2 rounded bg-gradient-to-r from-transparent via-zinc-500 to-zinc-200" />
+              <div className="w-24 h-2 rounded bg-gradient-to-r from-transparent via-zinc-400 to-zinc-600 dark:via-zinc-500 dark:to-zinc-200" />
               <span>100% Cover</span>
             </div>
           )}

@@ -13,14 +13,14 @@ export const LocationsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-extrabold text-slate-100 tracking-tight">
+            <h1 className="text-xl font-extrabold text-zinc-900 dark:text-slate-100 tracking-tight">
               Saved Locations & Multi-City Monitor
             </h1>
             <Badge variant="cyan" size="sm">
               {savedLocations.length} Saved
             </Badge>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-zinc-600 dark:text-slate-400">
             Track and compare conditions across your frequented cities and travel destinations.
           </p>
         </div>
@@ -32,7 +32,7 @@ export const LocationsPage: React.FC = () => {
             onClick={detectUserLocation}
             isLoading={isDetectingLocation}
           >
-            <MapPin className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+            <MapPin className="w-3.5 h-3.5 mr-1.5 text-blue-500 dark:text-cyan-400" />
             Detect GPS
           </Button>
         </div>

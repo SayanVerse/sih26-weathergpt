@@ -34,10 +34,10 @@ export const SavedLocationsList: React.FC = () => {
 
   if (savedLocations.length === 0) {
     return (
-      <Card className="text-center p-8 bg-zinc-900/60 border-zinc-800">
-        <Bookmark className="w-10 h-10 text-zinc-500 mx-auto mb-3" />
-        <h3 className="text-base font-semibold text-zinc-200 mb-1">No Saved Locations Yet</h3>
-        <p className="text-xs text-zinc-400 max-w-sm mx-auto mb-4">
+      <Card className="text-center p-8 bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 shadow-xs">
+        <Bookmark className="w-10 h-10 text-zinc-400 dark:text-zinc-500 mx-auto mb-3" />
+        <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-200 mb-1">No Saved Locations Yet</h3>
+        <p className="text-xs text-zinc-600 dark:text-zinc-400 max-w-sm mx-auto mb-4">
           Save your favorite cities to quickly switch between forecasts, monitor atmospheric trends, and compare conditions.
         </p>
       </Card>
@@ -56,14 +56,14 @@ export const SavedLocationsList: React.FC = () => {
             key={loc.id}
             className={`p-5 relative group transition-all duration-200 ${
               isCurrent
-                ? 'bg-zinc-900 border-blue-500/50 shadow-lg shadow-blue-500/10'
-                : 'bg-zinc-900/70 hover:bg-zinc-900 border-zinc-800'
+                ? 'bg-white dark:bg-zinc-900 border-blue-500 shadow-lg shadow-blue-500/10'
+                : 'bg-white/80 hover:bg-white dark:bg-zinc-900/70 dark:hover:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-xs hover:shadow-md'
             }`}
           >
             <div className="flex items-start justify-between gap-3 mb-3">
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h4 className="text-base font-semibold text-zinc-100 group-hover:text-blue-300 transition-colors">
+                  <h4 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                     {loc.name}
                   </h4>
                   {isCurrent && (
@@ -72,12 +72,12 @@ export const SavedLocationsList: React.FC = () => {
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-zinc-400 truncate">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
                   {[loc.region, loc.country].filter(Boolean).join(', ')}
                 </p>
               </div>
 
-              <div className="p-2 rounded-xl bg-zinc-800/80 border border-zinc-700/60">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-zinc-800/80 border border-blue-100 dark:border-zinc-700/60 text-blue-600 dark:text-blue-400">
                 <WeatherIcon
                   name={loc.cached_condition || 'Clear'}
                   className="w-6 h-6"
@@ -87,19 +87,19 @@ export const SavedLocationsList: React.FC = () => {
 
             <div className="flex items-baseline justify-between mb-4">
               <div>
-                <span className="text-2xl font-bold text-zinc-100 font-mono-numbers">
+                <span className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 font-mono-numbers">
                   {loc.cached_temp !== undefined
                     ? formatTemperature(loc.cached_temp, settings.temperatureUnit)
                     : '--'}
                 </span>
-                <span className="text-xs text-zinc-400 ml-2">
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 ml-2">
                   {loc.cached_condition || 'Atmospheric telemetry'}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-zinc-800 text-xs">
-              <span className="text-[11px] font-mono text-zinc-500">
+            <div className="flex items-center justify-between pt-3 border-t border-zinc-200 dark:border-zinc-800 text-xs">
+              <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
                 {loc.latitude.toFixed(2)}°, {loc.longitude.toFixed(2)}°
               </span>
 
@@ -111,7 +111,7 @@ export const SavedLocationsList: React.FC = () => {
                     e.stopPropagation();
                     removeSavedLocation(loc.id);
                   }}
-                  className="h-7 w-7 text-zinc-500 hover:text-rose-400 p-0 hover:bg-zinc-800"
+                  className="h-7 w-7 text-zinc-400 hover:text-rose-600 dark:text-zinc-500 dark:hover:text-rose-400 p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
                   title="Remove from saved"
                   aria-label="Remove saved city"
                 >

@@ -16,15 +16,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         'bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-sm hover:shadow-blue-600/25',
       secondary:
-        'bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border border-zinc-700/80 shadow-sm',
+        'bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700/80 shadow-sm',
       outline:
-        'border border-zinc-700/80 hover:border-zinc-600 bg-transparent text-zinc-200 hover:bg-zinc-800/60',
+        'border border-zinc-200 hover:border-zinc-300 dark:border-zinc-700/80 dark:hover:border-zinc-600 bg-white hover:bg-zinc-50 dark:bg-transparent text-zinc-700 hover:text-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800/60 shadow-sm dark:shadow-none',
       ghost:
-        'bg-transparent hover:bg-zinc-800/60 text-zinc-300 hover:text-zinc-100',
+        'bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/60 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100',
       subtle:
-        'bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20',
+        'bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 font-medium',
       danger:
-        'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25',
+        'bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/25 font-medium',
     };
 
     const sizes = {
