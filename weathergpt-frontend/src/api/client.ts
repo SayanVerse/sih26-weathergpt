@@ -69,8 +69,8 @@ export function setDataSourceMode(mode: 'auto' | 'fastapi' | 'mock'): void {
 }
 
 class HttpClient {
-  // Default timeout 4000ms for weather telemetry to prevent UI hang when local backend is offline
-  private timeoutMs: number = 4000;
+  // Default timeout 8000ms to allow smooth cloud backend (e.g. Render) connection
+  private timeoutMs: number = 8000;
 
   private getBaseUrl(): string {
     return getApiBaseUrl();

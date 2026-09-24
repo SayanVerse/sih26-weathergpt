@@ -7,7 +7,23 @@ from typing import Dict, Any, List, Optional
 from services.weather_engine import get_condition
 
 def get_api_key():
-    return os.environ.get("OPEN_WEATHER", "").strip()
+    return (
+        os.environ.get("OPEN_WEATHER")
+        or os.environ.get("OPENWEATHER_API_KEY")
+        or os.environ.get("OPEN_WEATHER_API_KEY")
+        or os.environ.get("WEATHER_API_KEY")
+        or ""
+    ).strip()
+
+def _format_timezone(tz: Any) -> str:
+    if tz is None:
+        return "UTC"
+    if isinstance(tz, (int, float)):
+        hours = int(tz) // 3600
+        minutes = abs(int(tz) % 3600) // 60
+        sign = "+" if hours >= 0 else "-"
+        return f"UTC{sign}{abs(hours):02d}:{minutes:02d}"
+    return str(tz)
 
 # Full mapping of all OWM icon codes to frontend icon identifiers
 def map_icon(ow_icon: str) -> str:
@@ -204,7 +220,7 @@ async def fetch_current_weather(lat: float, lon: float, location_meta: dict = No
                         "country": (location_meta or {}).get("country") or sys_data.get("country", ""),
                         "latitude": float(lat),
                         "longitude": float(lon),
-                        "timezone": data.get("timezone", "UTC")
+                        "timezone": _format_timezone(data.get("timezone", "UTC"))
                     }
 
                     current_formatted = {
@@ -239,6 +255,12 @@ async def fetch_current_weather(lat: float, lon: float, location_meta: dict = No
         curr = om_data.get("current", {})
         cond_meta = get_condition(curr.get("weather_code", 0), is_day=bool(curr.get("is_day", 1)))
         
+        daily_meta = om_data.get("daily", {})
+        sunrises = daily_meta.get("sunrise", [])
+        sunsets = daily_meta.get("sunset", [])
+        sunrise_val = sunrises[0] if sunrises else ""
+        sunset_val = sunsets[0] if sunsets else ""
+
         resolved_city = (location_meta or {}).get("name") or f"{lat:.2f}°, {lon:.2f}°"
         location_obj = {
             "name": resolved_city,
@@ -246,7 +268,7 @@ async def fetch_current_weather(lat: float, lon: float, location_meta: dict = No
             "country": (location_meta or {}).get("country", ""),
             "latitude": float(lat),
             "longitude": float(lon),
-            "timezone": om_data.get("timezone", "UTC")
+            "timezone": _format_timezone(om_data.get("timezone", "UTC"))
         }
 
         current_formatted = {
@@ -267,8 +289,8 @@ async def fetch_current_weather(lat: float, lon: float, location_meta: dict = No
             "icon": cond_meta["icon"],
             "timestamp": curr.get("time", ""),
             "is_day": bool(curr.get("is_day", 1)),
-            "sunrise": "",
-            "sunset": "",
+            "sunrise": sunrise_val,
+            "sunset": sunset_val,
             "air_quality_index": 42.0
         }
         return {"current": current_formatted, "alerts": []}
@@ -405,24 +427,28 @@ async def fetch_timeline_formatted_daily(lat: float, lon: float) -> list:
                         slots = days[date_key]
                         dt = datetime.strptime(date_key, "%Y-%m-%d").replace(tzinfo=timezone.utc)
                         temps = [s.get("main", {}).get("temp", 0) for s in slots]
-                        temp_high = max(temps)
-                        temp_low = min(temps)
+                        temp_high = max(temps) if temps else 0
+                        temp_low = min(temps) if temps else 0
                         
                         weather_ids = [(s.get("weather", [{}])[0].get("id", 800), s.get("weather", [{}])[0].get("icon", "01d")) for s in slots]
-                        id_counter = Counter(wid for wid, _ in weather_ids)
-                        dominant_id = id_counter.most_common(1)[0][0]
-                        dominant_icon = "01d"
-                        for wid, wicon in weather_ids:
-                            if wid == dominant_id:
-                                dominant_icon = wicon
-                                if wicon.endswith("d"):
-                                    break
+                        if not weather_ids:
+                            dominant_id = 800
+                            dominant_icon = "01d"
+                        else:
+                            id_counter = Counter(wid for wid, _ in weather_ids)
+                            dominant_id = id_counter.most_common(1)[0][0]
+                            dominant_icon = "01d"
+                            for wid, wicon in weather_ids:
+                                if wid == dominant_id:
+                                    dominant_icon = wicon
+                                    if wicon.endswith("d"):
+                                        break
                         
-                        max_pop = max(s.get("pop", 0) for s in slots)
+                        max_pop = max((s.get("pop", 0) for s in slots), default=0)
                         rain_sum = sum(_safe_float(s.get("rain", {}).get("3h", 0)) for s in slots)
                         snow_sum = sum(_safe_float(s.get("snow", {}).get("3h", 0)) for s in slots)
-                        max_wind = max(s.get("wind", {}).get("speed", 0) for s in slots)
-                        max_gust = max(s.get("wind", {}).get("gust", 0) for s in slots)
+                        max_wind = max((s.get("wind", {}).get("speed", 0) for s in slots), default=0)
+                        max_gust = max((s.get("wind", {}).get("gust", 0) for s in slots), default=0)
                         
                         daylight_hrs = _calc_daylight_hours(city_sunrise, city_sunset)
                         condition_str = map_condition_from_id(dominant_id, dominant_icon)

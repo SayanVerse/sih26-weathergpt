@@ -19,8 +19,8 @@ class CurrentWeatherResponse(BaseModel):
     air_quality_index: float
     cloud_cover: Optional[float] = None
     dew_point: Optional[float] = None
-    sunrise: str
-    sunset: str
+    sunrise: Optional[str] = ""
+    sunset: Optional[str] = ""
     icon: str
     timestamp: str
     is_day: bool

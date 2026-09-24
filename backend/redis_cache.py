@@ -8,10 +8,15 @@ import redis.asyncio as redis
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0")
+CELERY_BROKER_URL = os.getenv("REDIS_URL") or os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0")
 
-# Initialize Redis client
-redis_client = redis.from_url(CELERY_BROKER_URL, decode_responses=True)
+# Initialize Redis client with strict 1s timeout to prevent hanging on Render without Redis
+redis_client = redis.from_url(
+    CELERY_BROKER_URL,
+    decode_responses=True,
+    socket_connect_timeout=1.0,
+    socket_timeout=1.0
+)
 
 async def get_cached_weather(key: str) -> Optional[Any]:
     """
