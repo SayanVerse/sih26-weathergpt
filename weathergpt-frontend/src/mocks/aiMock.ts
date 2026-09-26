@@ -8,9 +8,7 @@ export async function getMockAIChatResponse(request: AIChatRequest): Promise<AIC
     return {
       response: `Based on the latest forecast for **${locName}**, precipitation probability stays below 20% throughout the afternoon, with zero heavy cloud formations detected on Doppler radar. You will **not need an umbrella** today, though a light windbreaker could be comfortable if you are out late into the evening.`,
       insights: [
-        'Precipitation probability: ~12%',
-        'Peak cloud cover: 30% around 16:00',
-        'No active severe convective warnings',
+
       ],
       actionable_advice: {
         umbrella_needed: false,
