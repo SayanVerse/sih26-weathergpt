@@ -5,30 +5,26 @@ import { Badge } from '../components/ui/Badge';
 
 export const MapPage: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-              Interactive Weather Radar & Map
-            </h1>
-            <Badge variant="blue" size="sm">
-              Doppler Telemetry
-            </Badge>
-          </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            Multi-layer meteorological map visualizing temperature gradients, precipitation radar, wind vectors, and cloud systems.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs text-zinc-700 dark:text-zinc-300 bg-white/80 dark:bg-zinc-900/80 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xs shrink-0">
-          <Radio className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 animate-pulse" />
-          <span>Real-time Satellite Feed</span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6 text-center">
+      <div className="flex justify-center mb-6">
+        <div className="p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20">
+          <Map className="w-12 h-12 text-blue-500" />
         </div>
       </div>
-
-      {/* Main Map Component */}
-      <WeatherMap />
+      
+      <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">
+        Interactive Weather Radar & Map
+      </h1>
+      
+      <div className="inline-block mt-2 mb-6">
+        <Badge variant="blue" size="lg" className="text-sm px-4 py-1">
+          Coming Soon
+        </Badge>
+      </div>
+      
+      <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+        We're working on integrating a powerful, multi-layer meteorological map visualizing temperature gradients, precipitation radar, wind vectors, and cloud systems. Stay tuned for future updates!
+      </p>
     </div>
   );
 };

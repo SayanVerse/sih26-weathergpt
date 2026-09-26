@@ -14,6 +14,7 @@ import { SplashScreen } from './components/layout/SplashScreen';
 
 import { DashboardPage } from './pages/DashboardPage';
 import { AssistantPage } from './pages/AssistantPage';
+import { AlertsPage } from './pages/AlertsPage';
 import { MapPage } from './pages/MapPage';
 import { LocationsPage } from './pages/LocationsPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -54,6 +55,7 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<DashboardPage />} />
                   <Route path="/assistant" element={<AssistantPage />} />
+                  <Route path="/alerts" element={<AlertsPage />} />
                   <Route path="/map" element={<MapPage />} />
                   <Route path="/locations" element={<LocationsPage />} />
                   <Route path="/settings" element={<SettingsPage />} />

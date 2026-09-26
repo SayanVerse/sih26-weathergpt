@@ -105,12 +105,15 @@ USER QUESTION:
     if conversation_history:
         # Take the last 6 messages to keep context window reasonable
         for msg in conversation_history[-6:]:
-            role = "user" if msg.role == "user" else "model"
+            msg_role = msg.get("role") if isinstance(msg, dict) else msg.role
+            msg_content = msg.get("content", "") if isinstance(msg, dict) else msg.content
             
-            content_text = msg.content
+            role = "user" if msg_role == "user" else "model"
+            
+            content_text = msg_content
             # To prevent schema hallucination, past model responses must match the expected JSON schema
             if role == "model":
-                content_text = json.dumps({"answer": msg.content, "insights": []})
+                content_text = json.dumps({"answer": msg_content, "insights": []})
                 
             contents.append(
                 types.Content(

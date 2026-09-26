@@ -14,12 +14,14 @@ from services.openweather import (
 )
 from services.geocoding import reverse_geocode
 from services.weather_intelligence import generate_weather_signals
+from services.weather_risk_service import evaluate_extreme_weather_risk
 from redis_cache import get_cached_weather, set_cached_weather
 from schemas.weather import (
     CurrentWeatherResponse,
     HourlyForecastResponse,
     DailyForecastResponse,
-    WeatherAlertsResponse
+    WeatherAlertsResponse,
+    RiskAssessmentResponse
 )
 
 router = APIRouter(tags=["Weather"])
@@ -207,6 +209,37 @@ async def get_weather_alerts(lat: float, lon: float, name: Optional[str] = None)
             "longitude": lon,
         }),
         "alerts": alerts_list
+    }
+
+@router.get("/api/weather/risk", response_model=RiskAssessmentResponse)
+async def get_weather_risk(lat: float, lon: float, name: Optional[str] = None):
+    """
+    GET /api/weather/risk?lat=&lon=
+    Phase 8: Extreme Weather Risk Engine
+    Returns RiskAssessmentResponse shape.
+    """
+    location_meta = {"name": name, "latitude": lat, "longitude": lon} if name else None
+    data = await _get_formatted_weather(lat, lon, location_meta)
+    
+    current = data.get("current", {})
+    daily_list = data.get("daily", [])
+    hourly_list = data.get("hourly", [])
+    
+    # 1. Get Phase 7 signals
+    signals = generate_weather_signals(current, daily_list, hourly_list)
+    
+    # 2. Map signals and conditions to Phase 8 structured risks
+    risk_data = evaluate_extreme_weather_risk(current, daily_list, hourly_list, signals)
+    
+    return {
+        "location": current.get("location", {
+            "name": f"Lat {lat:.2f}, Lon {lon:.2f}",
+            "country": "Unknown",
+            "latitude": lat,
+            "longitude": lon,
+        }),
+        "composite_risk_score": risk_data["composite_risk_score"],
+        "risks": risk_data["risks"]
     }
 
 # ─────────────────────────────────────────────────────────────────────────────

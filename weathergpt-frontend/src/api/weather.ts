@@ -7,6 +7,7 @@ import {
   AIInsightData,
   LocationInfo,
   CurrentWeatherSchema,
+  RiskAssessmentResponse,
 } from '../types/weather';
 import {
   getMockCurrentWeather,
@@ -245,6 +246,43 @@ export const weatherApi = {
         };
         const cur = currentWeather || getMockCurrentWeather(loc);
         return getMockAIInsights(loc, cur);
+      }
+      throw error;
+    }
+  },
+
+  /**
+   * GET /api/weather/risk?lat={lat}&lon={lon}
+   * Returns RiskAssessmentResponse.
+   */
+  async getRiskAssessment(
+    latitude: number,
+    longitude: number,
+    locationMeta?: Partial<LocationInfo>
+  ): Promise<RiskAssessmentResponse> {
+    const mode = getDataSourceMode();
+
+    if (mode === 'mock') {
+      // Return empty/low mock risk assessment
+      return {
+        location: makeFallbackLoc(latitude, longitude, locationMeta),
+        composite_risk_score: 'LOW',
+        risks: [],
+      };
+    }
+
+    try {
+      return await apiClient.get<RiskAssessmentResponse>('/api/weather/risk', {
+        lat: latitude,
+        lon: longitude,
+      });
+    } catch (error) {
+      if (mode === 'auto') {
+        return {
+          location: makeFallbackLoc(latitude, longitude, locationMeta),
+          composite_risk_score: 'LOW',
+          risks: [],
+        };
       }
       throw error;
     }

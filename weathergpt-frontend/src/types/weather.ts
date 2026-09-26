@@ -130,6 +130,22 @@ export interface AIInsightData {
   generated_at: string;
 }
 
+export interface WeatherRiskItem {
+  hazard: string;
+  risk_level: 'Low' | 'Moderate' | 'High' | 'Extreme';
+  severity: 'LOW' | 'WATCH' | 'WARNING' | 'CRITICAL';
+  reason: string;
+  affected_metric: string;
+  recommended_action: string;
+  time_period: 'Current' | 'Today' | 'Upcoming';
+}
+
+export interface RiskAssessmentResponse {
+  location: LocationInfo;
+  composite_risk_score: 'LOW' | 'MODERATE' | 'HIGH' | 'EXTREME';
+  risks: WeatherRiskItem[];
+}
+
 // Zod schemas for runtime validation
 export const LocationInfoSchema = z.object({
   id: z.string().optional(),

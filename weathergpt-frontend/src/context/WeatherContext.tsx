@@ -7,6 +7,7 @@ import {
   DailyForecastResponse,
   WeatherAlertsResponse,
   AIInsightData,
+  RiskAssessmentResponse,
 } from '../types/weather';
 import { SavedLocation } from '../types/location';
 import { weatherApi } from '../api/weather';
@@ -21,6 +22,7 @@ interface WeatherContextType {
   hourlyForecast: HourlyForecastResponse | undefined;
   dailyForecast: DailyForecastResponse | undefined;
   weatherAlerts: WeatherAlertsResponse | undefined;
+  riskAssessment: RiskAssessmentResponse | undefined;
   aiInsights: AIInsightData | undefined;
   isLoadingWeather: boolean;
   isWeatherError: boolean;
@@ -145,7 +147,18 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
     enabled: !!currentWeather,
   });
 
-  // 6. Saved Locations
+  // 6. Risk Assessment
+  const {
+    data: riskAssessment,
+    refetch: refetchRisk,
+  } = useQuery({
+    queryKey: ['weather', 'risk', lat, lon, settings.dataSourceMode, settings.apiBaseUrl],
+    queryFn: () => weatherApi.getRiskAssessment(lat, lon, currentLocation),
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
+
+  // 7. Saved Locations
   const { data: savedLocations = [], refetch: refetchSaved } = useQuery({
     queryKey: ['locations', 'saved', settings.dataSourceMode, settings.apiBaseUrl],
     queryFn: () => locationsApi.getSavedLocations(),
@@ -161,10 +174,11 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
       refetchHourly(),
       refetchDaily(),
       refetchAlerts(),
+      refetchRisk(),
       refetchInsights(),
       refetchSaved(),
     ]);
-  }, [refetchCurrent, refetchHourly, refetchDaily, refetchAlerts, refetchInsights, refetchSaved]);
+  }, [refetchCurrent, refetchHourly, refetchDaily, refetchAlerts, refetchRisk, refetchInsights, refetchSaved]);
 
   // Geolocation detection
   const detectUserLocation = useCallback(async () => {
@@ -344,6 +358,7 @@ export const WeatherProvider: React.FC<{ children: React.ReactNode }> = ({ child
         hourlyForecast,
         dailyForecast,
         weatherAlerts,
+        riskAssessment,
         aiInsights,
         isLoadingWeather,
         isWeatherError,

@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import engine, Base
-from routers import health, location, weather, ai, websocket
+from routers import health, location, weather, ai, websocket, nwp, climate
 
 app = FastAPI(title="WeatherGPT API", version="2.0.0")
 
@@ -83,3 +83,5 @@ app.include_router(location.router)
 app.include_router(weather.router)
 app.include_router(ai.router)
 app.include_router(websocket.router)
+app.include_router(nwp.router)
+app.include_router(climate.router)

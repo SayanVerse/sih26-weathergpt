@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 from main import app
 
 client = TestClient(app)
@@ -14,7 +14,7 @@ def test_health_endpoints():
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
 
-@patch("main.search_locations")
+@patch("routers.location.search_locations", new_callable=AsyncMock)
 def test_search_location(mock_search):
     mock_search.return_value = [
         {
@@ -42,11 +42,8 @@ def test_search_location(mock_search):
     assert response.status_code == 200
     assert response.json() == []
 
-@patch("main.get_cached_weather")
-@patch("main.set_cached_weather")
-@patch("main.fetch_weather_formatted")
-def test_get_weather_current(mock_fetch, mock_set_cache, mock_get_cache):
-    mock_get_cache.return_value = None
+@patch("routers.weather.fetch_current_weather", new_callable=AsyncMock)
+def test_get_weather_current(mock_fetch):
     mock_fetch.return_value = {
         "location": {
             "name": "London",
@@ -72,6 +69,7 @@ def test_get_weather_current(mock_fetch, mock_set_cache, mock_get_cache):
             "wind_direction": "NW",
             "visibility": 10.0,
             "uv_index": 3.0,
+            "air_quality_index": 1,
             "sunrise": "06:00 AM",
             "sunset": "06:00 PM",
             "icon": "cloud",
@@ -86,21 +84,18 @@ def test_get_weather_current(mock_fetch, mock_set_cache, mock_get_cache):
     assert data["temperature"] == 15.5
     assert data["condition"] == "Cloudy"
 
-@patch("main.get_cached_weather")
-@patch("main.fetch_weather_formatted")
-def test_get_weather_forecast(mock_fetch, mock_get_cache):
-    mock_get_cache.return_value = None
+@patch("routers.weather._get_formatted_weather", new_callable=AsyncMock)
+def test_get_weather_forecast(mock_fetch):
     mock_fetch.return_value = {
-        "daily": {
-            "location": {
-                "name": "London",
-                "country": "UK",
-                "latitude": 51.5,
-                "longitude": -0.1,
-            },
-            "forecast": [
-                {
-                    "date": "2023-10-01",
+        "location": {
+            "name": "London",
+            "country": "UK",
+            "latitude": 51.5,
+            "longitude": -0.1,
+        },
+        "daily": [
+            {
+                "date": "2023-10-01",
                     "day_name": "Sunday",
                     "temperature_high": 20.0,
                     "temperature_low": 10.0,
@@ -109,9 +104,8 @@ def test_get_weather_forecast(mock_fetch, mock_get_cache):
                     "humidity": 60,
                     "wind_speed": 15.0,
                     "icon": "sun"
-                }
-            ]
-        }
+            }
+        ]
     }
     
     response = client.get("/api/weather/forecast?lat=51.5&lon=-0.1")

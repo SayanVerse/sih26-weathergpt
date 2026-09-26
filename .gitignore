@@ -31,3 +31,8 @@ weathergpt-frontend/.env
 .DS_Store
 Thumbs.db
 *.log
+
+# Local and temporary files
+scratch/
+.agents/
+backend/saved_locations.json

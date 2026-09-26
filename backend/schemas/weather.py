@@ -127,3 +127,17 @@ class AIChatResponse(BaseModel):
     insights: Optional[List[str]] = None
     actionable_advice: Optional[dict] = None
     sources: Optional[List[str]] = None
+
+class WeatherRiskItem(BaseModel):
+    hazard: str
+    risk_level: str
+    severity: str
+    reason: str
+    affected_metric: str
+    recommended_action: str
+    time_period: str
+
+class RiskAssessmentResponse(BaseModel):
+    location: LocationInfo
+    composite_risk_score: str
+    risks: List[WeatherRiskItem]

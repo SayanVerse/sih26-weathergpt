@@ -7,6 +7,7 @@ import {
   BookmarkCheck,
   Settings as SettingsIcon,
   Sparkles,
+  ShieldAlert,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -24,9 +25,9 @@ export const Navigation: React.FC = () => {
       badge: 'GPT',
     },
     {
-      to: '/map',
-      label: 'Weather Map',
-      icon: Map,
+      to: '/alerts',
+      label: 'Alerts',
+      icon: ShieldAlert,
     },
     {
       to: '/locations',
@@ -37,6 +38,11 @@ export const Navigation: React.FC = () => {
       to: '/settings',
       label: 'Settings',
       icon: SettingsIcon,
+    },
+    {
+      to: '/map',
+      label: 'Weather Map',
+      icon: Map,
     },
   ];
 
